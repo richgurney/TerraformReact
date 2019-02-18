@@ -1,5 +1,5 @@
 variable "name" {
-  default="Els-TF"
+  default="SpartaThreeTier-TF"
 }
 
 variable "db_ami_id" {

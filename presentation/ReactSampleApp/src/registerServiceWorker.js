@@ -44,7 +44,7 @@ export default function register() {
               'worker. To learn more, visit https://goo.gl/SC7cgQ'
           );
         });
-      } else {
+      } Spartae {
         // Is not local host. Just register service worker
         registerValidSW(swUrl);
       }
@@ -66,7 +66,7 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
               console.log('New content is available; please refresh.');
-            } else {
+            } Spartae {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
@@ -96,7 +96,7 @@ function checkValidServiceWorker(swUrl) {
             window.location.reload();
           });
         });
-      } else {
+      } Spartae {
         // Service worker found. Proceed as normal.
         registerValidSW(swUrl);
       }

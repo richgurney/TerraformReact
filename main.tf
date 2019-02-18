@@ -22,7 +22,7 @@ resource "aws_internet_gateway" "app" {
 
 module "view" {
   source =  "./modules/view_tier"
-  name = "Els-web"
+  name = "Sparta-web"
   src_directory="presentation/build/static"
   app_ip="${module.app.app_instance}"
 }
@@ -30,7 +30,7 @@ module "view" {
 module "app" {
   source = "./modules/app_tier"
   vpc_id = "${aws_vpc.app.id}"
-  name = "Els-app"
+  name = "Sparta-app"
   user_data = "${data.template_file.app_init.rendered}"
   ig_id = "${aws_internet_gateway.app.id}"
   ami_id = "${var.app_ami_id}"
@@ -39,7 +39,7 @@ module "app" {
 module "db" {
   source = "./modules/db_tier"
   vpc_id = "${aws_vpc.app.id}"
-  name = "Els-db"
+  name = "Sparta-db"
   ami_id = "${var.db_ami_id}"
   app_sg = "${module.app.security_group_id}"
   app_subnet_cidr = "${module.app.subnet_cidr_block}"
@@ -75,7 +75,7 @@ resource "aws_security_group" "elb"  {
 }
 
 
-resource "aws_lb" "ElsLB" {
+resource "aws_lb" "SpartaLB" {
   name               = "${var.name}-app-elb"
   internal           = false
   load_balancer_type = "network"
@@ -83,29 +83,29 @@ resource "aws_lb" "ElsLB" {
   enable_deletion_protection = false
 
   tags {
-    Name = "ElsLB"
+    Name = "SpartaLB"
   }
 }
 
-resource "aws_lb_target_group" "ElsAppTG" {
-  name     = "ElsAppTG"
+resource "aws_lb_target_group" "SpartaAppTG" {
+  name     = "SpartaAppTG"
   port     = 80
   protocol = "TCP"
   vpc_id   = "${aws_vpc.app.id}"
 }
 
-resource "aws_lb_listener" "ElsAppL" {
-  load_balancer_arn = "${aws_lb.ElsLB.arn}"
+resource "aws_lb_listener" "SpartaAppL" {
+  load_balancer_arn = "${aws_lb.SpartaLB.arn}"
   port = 80
   protocol = "TCP"
 
   default_action {
     type = "forward"
-    target_group_arn = "${aws_lb_target_group.ElsAppTG.arn}"
+    target_group_arn = "${aws_lb_target_group.SpartaAppTG.arn}"
   }
 }
 
-resource "aws_launch_configuration" "ElsLaunchConfig" {
+resource "aws_launch_configuration" "SpartaLaunchConfig" {
   name_prefix   = "${var.name}-app"
   image_id      = "${var.app_ami_id}"
   instance_type = "t2.micro"
@@ -113,17 +113,17 @@ resource "aws_launch_configuration" "ElsLaunchConfig" {
   security_groups = ["${module.app.security_group_id}"]
 }
 
-resource "aws_autoscaling_group" "ElsAppAutoScaling" {
-  name = "ElsAppAutoScaling"
+resource "aws_autoscaling_group" "SpartaAppAutoScaling" {
+  name = "SpartaAppAutoScaling"
   availability_zones = ["eu-west-2a"]
   vpc_zone_identifier = ["${module.app.subnet_app_id}"]
   desired_capacity = 0
   max_size = 0
   min_size = 0
-  launch_configuration = "${aws_launch_configuration.ElsLaunchConfig.name}"
-  target_group_arns = ["${aws_lb_target_group.ElsAppTG.arn}"]
+  launch_configuration = "${aws_launch_configuration.SpartaLaunchConfig.name}"
+  target_group_arns = ["${aws_lb_target_group.SpartaAppTG.arn}"]
   tags {
-    key = "Els"
+    key = "Sparta"
     value = "App-AS"
     propagate_at_launch = true
   }
@@ -132,10 +132,10 @@ resource "aws_autoscaling_group" "ElsAppAutoScaling" {
 # Route 53
 resource "aws_route53_record" "www" {
   zone_id = "${var.zone_id}"
-  name    = "els"
+  name    = "Sparta"
   type    = "CNAME"
   ttl     = "300"
-  records = ["${aws_lb.ElsLB.dns_name}"]
+  records = ["${aws_lb.SpartaLB.dns_name}"]
 }
 
 
