@@ -3,3 +3,6 @@ terraform.tfstate.backup
 
 .terraform/
 presentation/ReactSampleApp/node_modules/
+presentation/ReactSampleApp/build/
+presentation/ReactSampleApp/package-lock.json
+presentation/ReactSampleApp/.env

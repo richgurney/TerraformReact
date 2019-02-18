@@ -11,5 +11,5 @@ variable "name" {
 }
 
 variable "app_ip" {
-  description = "application id"
+  description = "NodeApp ip"
 }

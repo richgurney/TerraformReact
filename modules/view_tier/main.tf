@@ -44,14 +44,3 @@ EOF
   }
   depends_on = ["aws_s3_bucket.react_bucket"]
 }
-
-# resource "null_resource" "s3_deploy" {
-#   provisioner "local_exec" {
-#     command = <<EOF
-#     cd presentation/ReactSampleApp
-#
-# EOF
-#   }
-#
-#   depends_on = ["aws_s3_bucket.react_bucket"]
-# }

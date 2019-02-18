@@ -28,7 +28,6 @@ class Posts extends Component {
   }
 
   componentDidMount() {
-    // fetch("http://3.8.118.110/posts").then(results => {
     fetch(process.env.REACT_APP_HOST).then(results => {
       return results.json();
     }).then(data => {
